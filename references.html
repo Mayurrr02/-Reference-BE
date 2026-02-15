@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IPQuest - Reference Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #f4f6f9;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background-color: #2c4a7a;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+
+    .navbar h2 {
+      font-weight: 600;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin-left: 25px;
+      font-weight: 500;
+    }
+
+    .navbar a:hover {
+      text-decoration: underline;
+    }
+
+    /* HEADER SECTION */
+    .header {
+      text-align: center;
+      padding: 60px 20px 30px;
+    }
+
+    .header h1 {
+      font-size: 36px;
+      color: #2c4a7a;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: #555;
+      font-size: 18px;
+    }
+
+    /* FILTER SECTION */
+    .filters {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .filters input,
+    .filters select {
+      padding: 10px;
+      width: 220px;
+      margin: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .filters button {
+      padding: 10px 18px;
+      border: none;
+      background-color: #2c4a7a;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .filters button:hover {
+      background-color: #1f355a;
+    }
+
+    /* CARD CONTAINER */
+    .container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      padding: 40px;
+    }
+
+    /* CARD */
+    .card {
+      background-color: white;
+      width: 400px;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      color: #2c4a7a;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .card strong {
+      color: #333;
+    }
+
+    .card button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background-color: #2c4a7a;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .card button:hover {
+      background-color: #1f355a;
+    }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      padding: 15px;
+      background-color: #2c4a7a;
+      color: white;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <h2>IPQuest</h2>
+    <div>
+      <a href="#">Home</a>
+      <a href="#">Games</a>
+      <a href="#">Leaderboard</a>
+      <a href="#">Reference Hub</a>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>IPR Reference Hub</h1>
+    <p>Explore trusted resources, legal documents, and official IPR information.</p>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters">
+    <input type="text" id="search" placeholder="Search resources...">
+
+    <select id="category">
+      <option value="">All Categories</option>
+      <option value="Patent">Patent</option>
+      <option value="Trademark">Trademark</option>
+      <option value="Copyright">Copyright</option>
+      <option value="GI">GI</option>
+      <option value="Design">Design</option>
+      <option value="General">General</option>
+    </select>
+
+    <button onclick="fetchReferences()">Filter</button>
+  </div>
+
+  <!-- CARDS -->
+  <div class="container" id="results"></div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    © 2026 IPQuest – Empowering IPR Awareness Through Gamification
+  </div>
+
+<script>
+  const API_URL = "http://localhost:5000/api/references";
+
+  async function fetchReferences() {
+    const search = document.getElementById("search").value;
+    const category = document.getElementById("category").value;
+
+    let url = API_URL + "?";
+
+    if (category) url += "category=" + category + "&";
+    if (search) url += "search=" + search;
+
+    const res = await fetch(url);
+    const data = await res.json();
+
+    const container = document.getElementById("results");
+    container.innerHTML = "";
+
+    if (data.length === 0) {
+      container.innerHTML = "<p>No resources found.</p>";
+      return;
+    }
+
+    data.forEach(ref => {
+      container.innerHTML += `
+        <div class="card">
+          <h3>${ref.title}</h3>
+          <p><strong>Category:</strong> ${ref.category}</p>
+          <p><strong>Source:</strong> ${ref.sourceName}</p>
+          <p>${ref.description}</p>
+          <button onclick="window.open('${ref.officialUrl}','_blank')">
+            Visit Resource
+          </button>
+        </div>
+      `;
+    });
+  }
+
+  fetchReferences();
+</script>
+<script> window.chtlConfig = { chatbotId: "7552192739" } </script>
+<script async data-id="7552192739" id="chtl-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
+</body>
+</html>
