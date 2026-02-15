@@ -23,7 +23,7 @@ mongoose.connect(process.env.MONGO_URI)
 ============================== */
 const referenceRoutes = require("./routes/referenceRoutes");
 app.use("/api/references", referenceRoutes);
-const scrapeIPIndia = require("./scraper/scrapeIPR");
+
 
 app.get("/run-scraper", async (req, res) => {
   try {
