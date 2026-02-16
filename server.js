@@ -1,12 +1,18 @@
-
-const scrapeIPIndia = require("./Scraper/scrapeIPR");
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+// Scraper imports
+const scrapeIPIndia = require("./Scraper/scrapeIPR");
+const scrapeWIPO = require("./Scraper/scrapeWIPO");
+
+// Reference routes
+const referenceRoutes = require("./routes/referenceRoutes");
+
 const app = express();
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
@@ -14,26 +20,41 @@ app.use(express.json());
    CONNECT MONGODB
 ============================== */
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log(err));
+  .then(() => console.log("MongoDB Connected ✅"))
+  .catch((err) => console.log("MongoDB connection error:", err));
 
+/* ==============================
+   HOME ROUTE
+============================== */
 app.get("/", (req, res) => {
   res.send("IPQuest Reference Hub API is Running 🚀");
 });
 
 /* ==============================
-   ROUTES
+   REFERENCE ROUTES
 ============================== */
-const referenceRoutes = require("./routes/referenceRoutes");
 app.use("/api/references", referenceRoutes);
 
-
-app.get("/run-scraper", async (req, res) => {
+/* ==============================
+   SCRAPER ROUTES
+============================== */
+app.get("/api/scrape/ipindia", async (req, res) => {
   try {
     await scrapeIPIndia();
-    res.send("Scraper executed successfully");
+    res.json({ message: "IP India scraping completed ✅" });
   } catch (err) {
-    res.status(500).send("Scraper failed");
+    console.log(err);
+    res.status(500).json({ message: "IP India scraping failed ❌" });
+  }
+});
+
+app.get("/api/scrape/wipo", async (req, res) => {
+  try {
+    await scrapeWIPO();
+    res.json({ message: "WIPO scraping completed ✅" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "WIPO scraping failed ❌" });
   }
 });
 
@@ -41,8 +62,6 @@ app.get("/run-scraper", async (req, res) => {
    START SERVER
 ============================== */
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT} 🚀`);
 });
-scrapeIPIndia();
