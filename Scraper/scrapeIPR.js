@@ -44,8 +44,8 @@ async function scrapeIPIndia() {
       if (!exists) {
         await Reference.create({
           title: item.title,
-          description: item.description,
-          category: item.category,
+          description: "Official resource from Intellectual Property Rights India",
+          category: "General",
           sourceName: "Intellectual Property India",
           officialUrl: item.officialUrl,
           tags: ["auto", "scraped"]
