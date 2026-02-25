@@ -31,7 +31,7 @@ async function scrapeWIPO() {
       });
     });
 
-    for (let item of links.slice(0, 15)) {
+    for (let item of links.slice(0, 20)) {
 
       const exists = await Reference.findOne({
         officialUrl: item.officialUrl
