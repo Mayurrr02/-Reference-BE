@@ -29,10 +29,14 @@ const referenceSchema = new mongoose.Schema(
     officialUrl: {
       type: String,
       required: true,
+      unique: true // prevents duplication
     },
     tags: [String],
   },
   { timestamps: true }
 );
+
+// ✅ Index must be OUTSIDE schema definition
+referenceSchema.index({ officialUrl: 1 }, { unique: true });
 
 module.exports = mongoose.model("Reference", referenceSchema);
