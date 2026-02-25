@@ -34,7 +34,7 @@ async function scrapeIPIndia() {
       });
     });
 
-    // Insert only first 15 valid links
+    // Insert only first 20 valid links 
     for (let item of links.slice(0, 20)) {
 
       const exists = await Reference.findOne({
