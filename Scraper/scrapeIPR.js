@@ -35,7 +35,7 @@ async function scrapeIPIndia() {
     });
 
     // Insert only first 15 valid links
-    for (let item of links.slice(0, 15)) {
+    for (let item of links.slice(0, 20)) {
 
       const exists = await Reference.findOne({
         officialUrl: item.officialUrl
@@ -44,8 +44,8 @@ async function scrapeIPIndia() {
       if (!exists) {
         await Reference.create({
           title: item.title,
-          description: "Official resource from IP India.",
-          category: "General",
+          description: item.description,
+          category: item.category,
           sourceName: "Intellectual Property India",
           officialUrl: item.officialUrl,
           tags: ["auto", "scraped"]
