@@ -4,10 +4,19 @@ const Reference = require("../models/Reference");
 
 /* =================================
    ADD NEW REFERENCE (Admin)
+   Now supports: level, tags, type
 ================================= */
 router.post("/", async (req, res) => {
   try {
-    const newReference = new Reference(req.body);
+    const newReference = new Reference({
+      title: req.body.title,
+      content: req.body.content,
+      category: req.body.category,   // Patent / Design / Copyright
+      level: req.body.level,         // Beginner / Intermediate / Advanced
+      tags: req.body.tags || [],     // for similarity feature
+      type: req.body.type || "concept" // concept / case / document
+    });
+
     const saved = await newReference.save();
     res.status(201).json(saved);
   } catch (err) {
@@ -17,24 +26,58 @@ router.post("/", async (req, res) => {
 
 /* =================================
    GET ALL REFERENCES (User)
-   Filter + Search Supported
+   Advanced Filter + Search
 ================================= */
 router.get("/", async (req, res) => {
   try {
-    const { category, search } = req.query;
+    const { category, level, search } = req.query;
 
     let filter = {};
 
+    // Category filter
     if (category) {
       filter.category = category;
     }
 
+    // Level filter (NEW)
+    if (level) {
+      filter.level = level;
+    }
+
+    // Search in title + content (IMPROVED)
     if (search) {
-      filter.title = { $regex: search, $options: "i" };
+      filter.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { content: { $regex: search, $options: "i" } }
+      ];
     }
 
     const references = await Reference.find(filter).sort({ createdAt: -1 });
+
     res.json(references);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* =================================
+   GET SIMILAR REFERENCES (NEW 🔥)
+   Based on tags
+================================= */
+router.get("/similar/:id", async (req, res) => {
+  try {
+    const current = await Reference.findById(req.params.id);
+
+    if (!current) {
+      return res.status(404).json({ message: "Reference not found" });
+    }
+
+    const similar = await Reference.find({
+      _id: { $ne: current._id },
+      tags: { $in: current.tags }
+    }).limit(5);
+
+    res.json(similar);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

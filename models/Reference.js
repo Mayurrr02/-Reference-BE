@@ -6,10 +6,17 @@ const referenceSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
+    // Main content (used for learning + cases)
+    content: {
+      type: String,
+    },
+
+    // Keep description for backward compatibility
     description: {
       type: String,
-      required: true,
     },
+
     category: {
       type: String,
       required: true,
@@ -22,21 +29,44 @@ const referenceSchema = new mongoose.Schema(
         "General"
       ],
     },
+
+    // NEW: Learning level
+    level: {
+      type: String,
+      enum: ["Beginner", "Intermediate", "Advanced"],
+      default: "Beginner"
+    },
+
+    // NEW: Type of content
+    type: {
+      type: String,
+      enum: ["concept", "case", "document"],
+      default: "concept"
+    },
+
     sourceName: {
       type: String,
-      required: true,
     },
+
     officialUrl: {
       type: String,
       required: true,
-      unique: true // prevents duplication
+      unique: true
     },
-    tags: [String],
+
+    // VERY IMPORTANT for similarity feature
+    tags: {
+      type: [String],
+      default: []
+    }
   },
   { timestamps: true }
 );
 
-// ✅ Index must be OUTSIDE schema definition
-referenceSchema.index({ officialUrl: 1 }, { unique: true });
+// Index for faster search
+referenceSchema.index({ title: "text", content: "text" });
+
+// Prevent duplicate URLs
+
 
 module.exports = mongoose.model("Reference", referenceSchema);

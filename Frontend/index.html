@@ -27,213 +27,236 @@
       color: white;
     }
 
-    .navbar h2 {
-      font-weight: 600;
-    }
-
     .navbar a {
       color: white;
       text-decoration: none;
       margin-left: 25px;
-      font-weight: 500;
     }
 
-    .navbar a:hover {
-      text-decoration: underline;
-    }
-
-    /* HEADER SECTION */
+    /* HEADER */
     .header {
       text-align: center;
-      padding: 60px 20px 30px;
+      padding: 50px 20px 20px;
     }
 
     .header h1 {
-      font-size: 36px;
+      font-size: 40px;
       color: #2c4a7a;
-      margin-bottom: 10px;
     }
 
     .header p {
       color: #555;
-      font-size: 18px;
+      margin-top: 10px;
     }
 
-    /* FILTER SECTION */
+    /* FILTERS */
     .filters {
       text-align: center;
-      margin: 30px 0;
+      margin: 25px;
     }
 
     .filters input,
     .filters select {
       padding: 10px;
-      width: 220px;
       margin: 5px;
       border-radius: 6px;
       border: 1px solid #ccc;
+      width: 200px;
     }
 
     .filters button {
-      padding: 10px 18px;
-      border: none;
-      background-color: #2c4a7a;
+      padding: 10px 15px;
+      background: #2c4a7a;
       color: white;
+      border: none;
       border-radius: 6px;
       cursor: pointer;
     }
 
-    .filters button:hover {
-      background-color: #1f355a;
-    }
-
-    /* CARD CONTAINER */
+    /* CONTAINER */
     .container {
       display: flex;
-      justify-content: center;
       flex-wrap: wrap;
-      gap: 30px;
-      padding: 40px;
+      justify-content: center;
+      gap: 20px;
+      padding: 30px;
     }
 
     /* CARD */
     .card {
-      background-color: white;
-      width: 400px;
-      padding: 25px;
+      background: white;
+      width: 360px;
+      padding: 20px;
       border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-      transition: 0.3s;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
     }
 
     .card h3 {
       color: #2c4a7a;
-      margin-bottom: 10px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin: 5px 5px 5px 0;
+      background: #e0e7ff;
+      color: #2c4a7a;
     }
 
     .card p {
-      color: #555;
-      margin-bottom: 10px;
-    }
-
-    .card strong {
-      color: #333;
+      margin: 10px 0;
+      color: #444;
     }
 
     .card button {
       width: 100%;
-      padding: 12px;
+      margin-top: 8px;
+      padding: 10px;
       border: none;
-      background-color: #2c4a7a;
+      background: #2c4a7a;
       color: white;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
-      font-size: 15px;
     }
 
     .card button:hover {
-      background-color: #1f355a;
+      background: #1f355a;
     }
 
-    /* FOOTER */
     .footer {
       text-align: center;
       padding: 15px;
-      background-color: #2c4a7a;
+      background: #2c4a7a;
       color: white;
-      margin-top: 50px;
+      margin-top: 40px;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- NAVBAR -->
-  <div class="navbar">
-    <h2>IPQuest</h2>
-    <div>
-      <a href="https://quizzy-frontend-c27i.onrender.com">Home</a>
-      <a href="https://fact-explorer-frontend.onrender.com">Fact Explorer</a>
-      <a href="#">Reference Hub</a>
-    </div>
+<!-- NAVBAR -->
+<div class="navbar">
+  <h2>IPQuest</h2>
+  <div>
+    <a href="#">Home</a>
+    <a href="#">Reference Hub</a>
   </div>
+</div>
 
-  <!-- HEADER -->
-  <div class="header">
-    <h1>IPR Reference Hub</h1>
-    <p>Explore trusted resources, legal documents, and official IPR information.</p>
-  </div>
+<!-- HEADER -->
+<div class="header">
+  <h1>IPR Reference Hub</h1>
+  <p>Learn Intellectual Property in a simple and structured way</p>
+</div>
 
-  <!-- FILTERS -->
-  <div class="filters">
-    <input type="text" id="search" placeholder="Search resources...">
+<!-- FILTERS -->
+<div class="filters">
+  <input type="text" id="search" placeholder="Search...">
 
-    <select id="category">
-      <option value="">All Categories</option>
-      <option value="Patent">Patent</option>
-      <option value="Trademark">Trademark</option>
-      <option value="Copyright">Copyright</option>
-      <option value="GI">GI</option>
-      <option value="Design">Design</option>
-      <option value="General">General</option>
-    </select>
+  <select id="category">
+    <option value="">All Categories</option>
+    <option value="Patent">Patent</option>
+    <option value="Design">Design</option>
+    <option value="Copyright">Copyright</option>
+  </select>
 
-    <button onclick="fetchReferences()">Filter</button>
-  </div>
+  <select id="level">
+    <option value="">All Levels</option>
+    <option value="Beginner">Beginner</option>
+    <option value="Intermediate">Intermediate</option>
+    <option value="Advanced">Advanced</option>
+  </select>
 
-  <!-- CARDS -->
-  <div class="container" id="results"></div>
+  <button onclick="fetchReferences()">Search</button>
+</div>
 
-  <!-- FOOTER -->
-  <div class="footer">
-    © 2026 IPQuest – Empowering IPR Awareness Through Gamification
-  </div>
+<!-- RESULTS -->
+<div class="container" id="results"></div>
+
+<!-- FOOTER -->
+<div class="footer">
+  © 2026 IPQuest – Learn • Decide • Protect
+</div>
 
 <script>
-  const API_URL = "https://reference-be.onrender.com/api/references";
+const API_URL = "https://reference-be.onrender.com/api/references";
 
-  async function fetchReferences() {
-    const search = document.getElementById("search").value;
-    const category = document.getElementById("category").value;
+/* FETCH REFERENCES */
+async function fetchReferences() {
+  const search = document.getElementById("search").value;
+  const category = document.getElementById("category").value;
+  const level = document.getElementById("level").value;
 
-    let url = API_URL + "?";
+  let url = API_URL + "?";
 
-    if (category) url += "category=" + category + "&";
-    if (search) url += "search=" + search;
+  if (category) url += "category=" + category + "&";
+  if (level) url += "level=" + level + "&";
+  if (search) url += "search=" + search;
 
-    const res = await fetch(url);
-    const data = await res.json();
+  const res = await fetch(url);
+  const data = await res.json();
 
-    const container = document.getElementById("results");
-    container.innerHTML = "";
+  const container = document.getElementById("results");
+  container.innerHTML = "";
 
-    if (data.length === 0) {
-      container.innerHTML = "<p>No resources found.</p>";
-      return;
-    }
-
-    data.forEach(ref => {
-      container.innerHTML += `
-        <div class="card">
-          <h3>${ref.title}</h3>
-          <p><strong>Category:</strong> ${ref.category}</p>
-          <p><strong>Source:</strong> ${ref.sourceName}</p>
-          <p>${ref.description}</p>
-          <button onclick="window.open('${ref.officialUrl}','_blank')">
-            Visit Resource
-          </button>
-        </div>
-      `;
-    });
+  if (data.length === 0) {
+    container.innerHTML = "<p>No resources found</p>";
+    return;
   }
 
-  fetchReferences();
+  data.forEach(ref => {
+    container.innerHTML += `
+      <div class="card">
+        <h3>${ref.title}</h3>
+
+        <div>
+          <span class="tag">${ref.category}</span>
+          <span class="tag">${ref.level || "General"}</span>
+        </div>
+
+        <p>${ref.content || ref.description}</p>
+
+        <button onclick="window.open('${ref.officialUrl}','_blank')">
+          View Resource
+        </button>
+
+        <button onclick="showSimilar('${ref._id}')">
+          Show Similar Cases
+        </button>
+      </div>
+    `;
+  });
+}
+
+/* SIMILAR CASES */
+async function showSimilar(id) {
+  const res = await fetch(API_URL + "/similar/" + id);
+  const data = await res.json();
+
+  const container = document.getElementById("results");
+  container.innerHTML = "<h2 style='text-align:center'>Similar Cases</h2>";
+
+  if (data.length === 0) {
+    container.innerHTML += "<p style='text-align:center'>No similar cases found</p>";
+    return;
+  }
+
+  data.forEach(ref => {
+    container.innerHTML += `
+      <div class="card">
+        <h3>${ref.title}</h3>
+        <p>${ref.content}</p>
+      </div>
+    `;
+  });
+}
+
+/* INITIAL LOAD */
+fetchReferences();
 </script>
-<script> window.chtlConfig = { chatbotId: "7552192739" } </script>
-<script async data-id="7552192739" id="chtl-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
+
 </body>
 </html>
