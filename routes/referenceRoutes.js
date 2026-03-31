@@ -4,17 +4,16 @@ const Reference = require("../models/Reference");
 
 /* =================================
    ADD NEW REFERENCE (Admin)
-   Now supports: level, tags, type
 ================================= */
 router.post("/", async (req, res) => {
   try {
     const newReference = new Reference({
       title: req.body.title,
       content: req.body.content,
-      category: req.body.category,   // Patent / Design / Copyright
-      level: req.body.level,         // Beginner / Intermediate / Advanced
-      tags: req.body.tags || [],     // for similarity feature
-      type: req.body.type || "concept" // concept / case / document
+      category: req.body.category,
+      level: req.body.level,
+      tags: req.body.tags || [],
+      type: req.body.type || "concept"
     });
 
     const saved = await newReference.save();
@@ -25,8 +24,7 @@ router.post("/", async (req, res) => {
 });
 
 /* =================================
-   GET ALL REFERENCES (User)
-   Advanced Filter + Search
+   GET ALL REFERENCES (WITH FILTERS)
 ================================= */
 router.get("/", async (req, res) => {
   try {
@@ -34,21 +32,37 @@ router.get("/", async (req, res) => {
 
     let filter = {};
 
-    // Category filter
+    // CATEGORY (case-insensitive)
     if (category) {
-      filter.category = category;
+      filter.category = {
+        $regex: category,
+        $options: "i"
+      };
     }
 
-    // Level filter (NEW)
+    // LEVEL (case-insensitive)
     if (level) {
-      filter.level = level;
+      filter.level = {
+        $regex: level,
+        $options: "i"
+      };
     }
 
-    // Search in title + content (IMPROVED)
+    // SEARCH (title + content)
     if (search) {
       filter.$or = [
-        { title: { $regex: search, $options: "i" } },
-        { content: { $regex: search, $options: "i" } }
+        {
+          title: {
+            $regex: search,
+            $options: "i"
+          }
+        },
+        {
+          content: {
+            $regex: search,
+            $options: "i"
+          }
+        }
       ];
     }
 
@@ -61,8 +75,7 @@ router.get("/", async (req, res) => {
 });
 
 /* =================================
-   GET SIMILAR REFERENCES (NEW 🔥)
-   Based on tags
+   GET SIMILAR REFERENCES
 ================================= */
 router.get("/similar/:id", async (req, res) => {
   try {
