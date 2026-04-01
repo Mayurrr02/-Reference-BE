@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Smart Patent Generator</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #eef2f7;
+    margin: 0;
+}
+
+header {
+    background: linear-gradient(135deg,#111827,#1f2937);
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background: #111827;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.output {
+    margin-top: 20px;
+    background: #f9fafb;
+    padding: 15px;
+    border-radius: 8px;
+    white-space: pre-wrap;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Smart Patent Generator 🚀</h1>
+    <p>Auto-generate patent draft with minimal input</p>
+</header>
+
+<div class="container">
+
+    <h2>Enter Basic Idea</h2>
+
+    <input type="text" id="title" placeholder="Invention Title">
+    <textarea id="idea" placeholder="Describe your idea in 2-3 lines"></textarea>
+
+    <button onclick="generateSmart()">Generate Smart Draft</button>
+
+    <div class="output" id="output"></div>
+
+</div>
+
+<script>
+function generateSmart() {
+    const title = document.getElementById("title").value.toLowerCase();
+    const idea = document.getElementById("idea").value;
+
+    let field = "";
+    let advantages = "";
+    let claims = "";
+
+    // 🧠 Smart detection logic
+    if(title.includes("ai") || title.includes("machine learning")) {
+        field = "Artificial Intelligence and Machine Learning systems.";
+        advantages = "- Improves automation\n- Learns from data\n- Scalable solution";
+        claims = `
+1. A system using machine learning models to process input data.
+2. The system of claim 1, wherein predictions are generated dynamically.
+3. The method improves efficiency using adaptive learning algorithms.
+`;
+    }
+    else if(title.includes("blockchain")) {
+        field = "Blockchain and decentralized systems.";
+        advantages = "- Secure transactions\n- Decentralization\n- Transparency";
+        claims = `
+1. A blockchain-based system for secure data storage.
+2. The system ensures tamper-proof transaction records.
+`;
+    }
+    else {
+        field = "General technological innovation.";
+        advantages = "- Efficient\n- Cost-effective\n- Scalable";
+        claims = `
+1. A system designed to solve a technical problem.
+2. The system improves performance and usability.
+`;
+    }
+
+    const draft = `
+==============================
+FORM 2 - PROVISIONAL SPECIFICATION
+==============================
+
+Title:
+${title.toUpperCase()}
+
+Field of the Invention:
+${field}
+
+Background:
+${idea}
+
+Summary of the Invention:
+The present invention provides a novel solution for ${idea.toLowerCase()}.
+
+Advantages:
+${advantages}
+
+Claims:
+${claims}
+
+(Note: Auto-generated draft. Modify before official filing.)
+`;
+
+    document.getElementById("output").textContent = draft;
+}
+</script>
+
+</body>
+</html>
