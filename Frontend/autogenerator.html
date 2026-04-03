@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Smart Patent Generator</title>
+<title>AI Smart IP Generator</title>
 
 <style>
 body {
@@ -43,6 +43,7 @@ button {
     border-radius: 6px;
     cursor: pointer;
     width: 100%;
+    font-size: 16px;
 }
 
 .output {
@@ -52,81 +53,165 @@ button {
     border-radius: 8px;
     white-space: pre-wrap;
 }
+
+.badges {
+    margin-top: 10px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 6px 10px;
+    margin-right: 5px;
+    border-radius: 20px;
+    background: #2563eb;
+    color: white;
+    font-size: 12px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-    <h1>Smart Patent Generator 🚀</h1>
-    <p>Auto-generate patent draft with minimal input</p>
+    <h1>Smart IP Generator 🚀</h1>
+    <p>Patent • Trademark • Copyright Detector</p>
 </header>
 
 <div class="container">
 
-    <h2>Enter Basic Idea</h2>
+    <h2>Enter Your Idea</h2>
 
-    <input type="text" id="title" placeholder="Invention Title">
-    <textarea id="idea" placeholder="Describe your idea in 2-3 lines"></textarea>
+    <input type="text" id="title" placeholder="Invention / Brand / Content Title">
+    <textarea id="idea" placeholder="Describe your idea in detail..."></textarea>
 
-    <button onclick="generateSmart()">Generate Smart Draft</button>
+    <button onclick="generateSmart()">Generate IP Draft</button>
+
+    <div class="badges" id="badges"></div>
 
     <div class="output" id="output"></div>
 
 </div>
 
 <script>
+
+// ------------------------------
+// DOMAIN DETECTION ENGINE
+// ------------------------------
+function detectDomain(title, idea) {
+    const text = (title + " " + idea).toLowerCase();
+
+    let score = {
+        patent: 0,
+        trademark: 0,
+        copyright: 0
+    };
+
+    const patentKeywords = [
+        "system","method","device","process","technology",
+        "machine","algorithm","hardware","ai","blockchain","software"
+    ];
+
+    const trademarkKeywords = [
+        "brand","logo","name","symbol","slogan","tagline","company"
+    ];
+
+    const copyrightKeywords = [
+        "music","song","book","video","design",
+        "art","code","content","image","app"
+    ];
+
+    patentKeywords.forEach(w => {
+        if (text.includes(w)) score.patent++;
+    });
+
+    trademarkKeywords.forEach(w => {
+        if (text.includes(w)) score.trademark++;
+    });
+
+    copyrightKeywords.forEach(w => {
+        if (text.includes(w)) score.copyright++;
+    });
+
+    const max = Math.max(score.patent, score.trademark, score.copyright);
+
+    let result = [];
+
+    if (score.patent === max && max > 0) result.push("Patent");
+    if (score.trademark === max && max > 0) result.push("Trademark");
+    if (score.copyright === max && max > 0) result.push("Copyright");
+
+    if (result.length === 0) result.push("General IP");
+
+    return result;
+}
+
+
+// ------------------------------
+// MAIN GENERATOR
+// ------------------------------
 function generateSmart() {
-    const title = document.getElementById("title").value.toLowerCase();
+    const title = document.getElementById("title").value;
     const idea = document.getElementById("idea").value;
+
+    const domains = detectDomain(title, idea);
+
+    // Show badges
+    const badgeBox = document.getElementById("badges");
+    badgeBox.innerHTML = domains.map(d =>
+        `<span class="badge">${d}</span>`
+    ).join("");
 
     let field = "";
     let advantages = "";
     let claims = "";
 
-    // 🧠 Smart detection logic
-    if(title.includes("ai") || title.includes("machine learning")) {
-        field = "Artificial Intelligence and Machine Learning systems.";
-        advantages = "- Improves automation\n- Learns from data\n- Scalable solution";
-        claims = `
-1. A system using machine learning models to process input data.
-2. The system of claim 1, wherein predictions are generated dynamically.
-3. The method improves efficiency using adaptive learning algorithms.
-`;
-    }
-    else if(title.includes("blockchain")) {
-        field = "Blockchain and decentralized systems.";
-        advantages = "- Secure transactions\n- Decentralization\n- Transparency";
-        claims = `
-1. A blockchain-based system for secure data storage.
-2. The system ensures tamper-proof transaction records.
-`;
-    }
-    else {
-        field = "General technological innovation.";
-        advantages = "- Efficient\n- Cost-effective\n- Scalable";
-        claims = `
+    // Patent
+    if(domains.includes("Patent")) {
+        field += "Technological innovation and system design.\n";
+        advantages += "- Innovation\n- Automation\n- Scalability\n";
+        claims += `
 1. A system designed to solve a technical problem.
-2. The system improves performance and usability.
+2. The system improves performance using automation.
+`;
+    }
+
+    // Trademark
+    if(domains.includes("Trademark")) {
+        field += "Brand identity and commercial recognition.\n";
+        advantages += "- Brand protection\n- Market identity\n";
+        claims += `
+3. Protection of brand name, logo, or slogan.
+`;
+    }
+
+    // Copyright
+    if(domains.includes("Copyright")) {
+        field += "Creative and digital content protection.\n";
+        advantages += "- Prevents copying\n- Protects originality\n";
+        claims += `
+4. Protection of original content such as code, design, or media.
 `;
     }
 
     const draft = `
 ==============================
-FORM 2 - PROVISIONAL SPECIFICATION
+SMART IP DRAFT GENERATOR
 ==============================
 
-Title:
-${title.toUpperCase()}
+Detected Domain:
+${domains.join(", ")}
 
-Field of the Invention:
+Title:
+${title}
+
+Field of Invention / Work:
 ${field}
 
 Background:
 ${idea}
 
-Summary of the Invention:
-The present invention provides a novel solution for ${idea.toLowerCase()}.
+Summary:
+This intellectual property relates to "${idea}" and falls under ${domains.join(", ")} protection category.
 
 Advantages:
 ${advantages}
@@ -134,11 +219,14 @@ ${advantages}
 Claims:
 ${claims}
 
-(Note: Auto-generated draft. Modify before official filing.)
+==============================
+NOTE: Auto-generated draft. Please verify before filing.
+==============================
 `;
 
     document.getElementById("output").textContent = draft;
 }
+
 </script>
 
 </body>
