@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IP India Document Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: #1e293b;
+    color: white;
+    height: 100vh;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    text-align: center;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 12px;
+    margin: 10px 0;
+    background: #334155;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.sidebar ul li:hover {
+    background: #3b82f6;
+}
+
+/* Main content */
+.content {
+    flex: 1;
+    padding: 30px;
+    background: #f1f5f9;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    color: #1e293b;
+}
+
+.btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background: #3b82f6;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>IP Portal</h2>
+    <ul>
+        <li onclick="loadContent('patent')">Patents</li>
+        <li onclick="loadContent('trademark')">Trademarks</li>
+        <li onclick="loadContent('design')">Designs</li>
+        <li onclick="loadContent('gi')">Geographical Indication</li>
+        <li onclick="loadContent('copyright')">Copyright</li>
+    </ul>
+</div>
+
+<div class="content">
+    <div id="mainContent" class="card">
+        <h1>Welcome to IP India Portal</h1>
+        <p>Select a category from the sidebar to access official documents and journals.</p>
+    </div>
+</div>
+
+<script>
+function loadContent(type) {
+    let content = document.getElementById("mainContent");
+
+    if(type === "patent") {
+        content.innerHTML = `
+            <h1>Patent Documents</h1>
+            <p>Access official patent journals, published applications, and search database.</p>
+            <a class="btn" href="https://patentscope.wipo.int/search/en/search.jsf" target="_blank">Search Patents</a><br>
+            <a class="btn" href="https://ipindia.gov.in/writereaddata/Portal/IPOJournal/1_95_1/Patent_Journal.htm" target="_blank">Patent Journal</a>
+        `;
+    }
+
+    if(type === "trademark") {
+        content.innerHTML = `
+            <h1>Trademark Documents</h1>
+            <p>Access trademark registry, journals, and status search.</p>
+            <a class="btn" href="https://ipindiaonline.gov.in/tmrpublicsearch/frmmain.aspx" target="_blank">Search Trademark</a><br>
+            <a class="btn" href="https://ipindia.gov.in/writereaddata/Portal/IPOJournal/1_95_1/Trademark_Journal.htm" target="_blank">Trademark Journal</a>
+        `;
+    }
+
+    if(type === "design") {
+        content.innerHTML = `
+            <h1>Design Documents</h1>
+            <p>Access registered designs and official records.</p>
+            <a class="btn" href="https://ipindiaservices.gov.in/designsearch" target="_blank">Search Designs</a>
+        `;
+    }
+
+    if(type === "gi") {
+        content.innerHTML = `
+            <h1>Geographical Indications</h1>
+            <p>Access GI registry and official publications.</p>
+            <a class="btn" href="https://ipindia.gov.in/registered-gls.htm" target="_blank">View GI Registry</a>
+        `;
+    }
+
+    if(type === "copyright") {
+        content.innerHTML = `
+            <h1>Copyright Documents</h1>
+            <p>Access copyright registration and official records.</p>
+            <a class="btn" href="https://copyright.gov.in/" target="_blank">Visit Copyright Office</a>
+        `;
+    }
+}
+</script>
+
+</body>
+</html>

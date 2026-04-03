@@ -233,6 +233,9 @@ body {
 <li onclick="window.open('autogenerator.html','_blank')">
   Smart Form Generator
 </li>
+<li onclick="window.open('documents.html','_blank')">
+  Get Access To Already Published documents
+</li>
 </li>
   </ul>
 
@@ -270,8 +273,17 @@ body {
     <option value="Design">Design</option>
     <option value="General">General</option>
   </select>
+  <select id="level">
+    <option value="">Level</option>
+    <option value="Patent">Begineer</option>
+    <option value="Trademark">Intermediate</option>
+    <option value="Copyright">Advanced</option>
+    
+    
+  </select>
   <button onclick="fetchReferences()">Filter</button>
 </div>
+
 
 <!-- CARDS -->
 <div class="container" id="results"></div>
@@ -309,6 +321,7 @@ async function fetchReferences() {
       <div class="card">
         <h3>${ref.title}</h3>
         <p><strong>Category:</strong> ${ref.category}</p>
+        <p><strong>Category:</strong> ${ref.level}</p>
         <p><strong>Source:</strong> ${ref.sourceName}</p>
         <p>${ref.description}</p>
         <button onclick="window.open('${ref.officialUrl}','_blank')">
