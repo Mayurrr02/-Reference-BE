@@ -274,13 +274,11 @@ body {
     <option value="General">General</option>
   </select>
   <select id="level">
-    <option value="">Level</option>
-    <option value="Patent">Begineer</option>
-    <option value="Trademark">Intermediate</option>
-    <option value="Copyright">Advanced</option>
-    
-    
-  </select>
+  <option value="">All Levels</option>
+  <option value="Beginner">Beginner</option>
+  <option value="Intermediate">Intermediate</option>
+  <option value="Advanced">Advanced</option>
+</select>
   <button onclick="fetchReferences()">Filter</button>
 </div>
 
@@ -299,10 +297,12 @@ const API_URL = "https://reference-be.onrender.com/api/references";
 async function fetchReferences() {
   const search = document.getElementById("search").value;
   const category = document.getElementById("category").value;
+  const level = document.getElementById("level").value; // ✅ NEW
 
   let url = API_URL + "?";
 
   if (category) url += "category=" + category + "&";
+  if (level) url += "level=" + level + "&"; // ✅ NEW
   if (search) url += "search=" + search;
 
   const res = await fetch(url);
@@ -321,7 +321,7 @@ async function fetchReferences() {
       <div class="card">
         <h3>${ref.title}</h3>
         <p><strong>Category:</strong> ${ref.category}</p>
-        <p><strong>Category:</strong> ${ref.level}</p>
+        <p><strong>Level:</strong> ${ref.level}</p> <!-- ✅ FIXED LABEL -->
         <p><strong>Source:</strong> ${ref.sourceName}</p>
         <p>${ref.description}</p>
         <button onclick="window.open('${ref.officialUrl}','_blank')">
@@ -331,6 +331,7 @@ async function fetchReferences() {
     `;
   });
 }
+
 
 fetchReferences();
 

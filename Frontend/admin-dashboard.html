@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IPQuest Admin Dashboard</title>
 
-<!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -22,64 +21,41 @@ header {
     text-align: center;
 }
 
-header h1 {
-    margin: 0;
-    font-size: 26px;
-}
-
 .container {
     max-width: 1000px;
     margin: 40px auto;
     background: white;
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-}
-
-h2 {
-    text-align: center;
-    color: #1e3c72;
-    margin-bottom: 20px;
 }
 
 form input, form select, form textarea {
     width: 100%;
     padding: 12px;
-    margin: 10px 0 20px 0;
+    margin: 10px 0;
     border-radius: 8px;
     border: 1px solid #ccc;
-    font-size: 14px;
 }
 
-form button {
+button {
+    width: 100%;
+    padding: 12px;
     background: #1e3c72;
     color: white;
-    padding: 12px 20px;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
     cursor: pointer;
-    width: 100%;
-    transition: 0.3s;
-}
-
-form button:hover {
-    background: #2a5298;
 }
 
 table {
     width: 100%;
+    margin-top: 20px;
     border-collapse: collapse;
-    margin-top: 30px;
-}
-
-table, th, td {
-    border: 1px solid #ccc;
 }
 
 th, td {
-    padding: 12px;
-    text-align: left;
+    border: 1px solid #ccc;
+    padding: 10px;
 }
 
 th {
@@ -87,198 +63,222 @@ th {
     color: white;
 }
 
-td button {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    color: white;
-    margin-right: 5px;
-}
-
-.edit-btn { background: #f0ad4e; }
-.delete-btn { background: #d9534f; }
-.save-btn { background: #5cb85c; }
+.edit-btn { background: orange; color: white; padding: 5px; }
+.delete-btn { background: red; color: white; padding: 5px; }
+.save-btn { background: green; color: white; padding: 5px; }
 
 .message {
     text-align: center;
-    font-weight: 600;
     margin-top: 10px;
 }
 </style>
 </head>
+
 <body>
 
 <header>
-    <h1>IPQuest Admin Dashboard</h1>
+<h1>IPQuest Admin Dashboard</h1>
 </header>
 
 <div class="container">
-    <h2>Add New Reference</h2>
-    <form id="adminForm">
-        <input type="text" id="title" placeholder="Title" required>
-        <textarea id="description" placeholder="Description" required></textarea>
-        <input type="url" id="link" placeholder="Link (https://...)" required>
-        <select id="category">
-            <option value="Patent">Patent</option>
-            <option value="Trademark">Trademark</option>
-            <option value="Copyright">Copyright</option>
-            <option value="General">General</option>
-        </select>
-        <button type="submit">Add Reference</button>
-        <div class="message" id="message"></div>
-    </form>
 
-    <h2>All References</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Link</th>
-                <th>Category</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="referencesTable"></tbody>
-    </table>
+<h2>Add Reference</h2>
+
+<form id="adminForm">
+
+<input type="text" id="title" placeholder="Title" required>
+
+<textarea id="description" placeholder="Description"></textarea>
+
+<input type="url" id="link" placeholder="Official URL" required>
+
+<select id="category">
+    <option value="Patent">Patent</option>
+    <option value="Trademark">Trademark</option>
+    <option value="Copyright">Copyright</option>
+    <option value="GI">GI</option>
+    <option value="Design">Design</option>
+    <option value="General">General</option>
+</select>
+
+<select id="level">
+    <option value="Beginner">Beginner</option>
+    <option value="Intermediate">Intermediate</option>
+    <option value="Advanced">Advanced</option>
+</select>
+
+<button type="submit">Add Reference</button>
+
+<div class="message" id="message"></div>
+
+</form>
+
+<h2>All References</h2>
+
+<table>
+<thead>
+<tr>
+<th>Title</th>
+<th>Description</th>
+<th>URL</th>
+<th>Category</th>
+<th>Level</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="referencesTable"></tbody>
+</table>
+
 </div>
 
 <script>
-const form = document.getElementById("adminForm");
-const message = document.getElementById("message");
-const table = document.getElementById("referencesTable");
 
-// ✅ Use your deployed backend URL
 const API_URL = "https://reference-be.onrender.com/api/references";
 
-// Admin password check
+const form = document.getElementById("adminForm");
+const table = document.getElementById("referencesTable");
+const message = document.getElementById("message");
+
+// Admin check
 const password = prompt("Enter Admin Password");
-if(password !== "mayur123") {
-    alert("Incorrect password!");
-    window.location.href = "index.html"; // redirect if wrong
+if(password !== "mayur123"){
+    alert("Wrong password");
+    window.location.href = "index.html";
 }
 
-// Load all references
-async function loadReferences() {
-    try {
-        const response = await fetch(API_URL);
-        const data = await response.json();
-        table.innerHTML = data.map(ref => `
-            <tr data-id="${ref._id}">
-                <td class="title">${ref.title}</td>
-                <td class="description">${ref.description}</td>
-                <td class="link"><a href="${ref.link}" target="_blank">Visit</a></td>
-                <td class="category">${ref.category}</td>
-                <td>
-                    <button class="edit-btn">Edit</button>
-                    <button class="delete-btn">Delete</button>
-                </td>
-            </tr>
-        `).join("");
+// Load references
+async function loadReferences(){
+    const res = await fetch(API_URL);
+    const data = await res.json();
 
-        document.querySelectorAll(".delete-btn").forEach(btn => btn.addEventListener("click", deleteReference));
-        document.querySelectorAll(".edit-btn").forEach(btn => btn.addEventListener("click", editReference));
+    table.innerHTML = data.map(ref => `
+        <tr data-id="${ref._id}">
+            <td class="title">${ref.title}</td>
+            <td class="description">${ref.description || ""}</td>
+            <td><a href="${ref.officialUrl}" target="_blank">Visit</a></td>
+            <td class="category">${ref.category}</td>
+            <td class="level">${ref.level}</td>
+            <td>
+                <button class="edit-btn">Edit</button>
+                <button class="delete-btn">Delete</button>
+            </td>
+        </tr>
+    `).join("");
 
-    } catch (err) {
-        console.error("Failed to load references:", err);
-    }
+    attachEvents();
 }
 
-// Add new reference
-form.addEventListener("submit", async e => {
-    e.preventDefault();
+// Attach buttons
+function attachEvents(){
+    document.querySelectorAll(".delete-btn").forEach(btn=>{
+        btn.onclick = deleteRef;
+    });
 
-    const ref = {
-        title: document.getElementById("title").value,
-        description: document.getElementById("description").value,
-        link: document.getElementById("link").value,
-        category: document.getElementById("category").value
-    };
-
-    try {
-        const response = await fetch(API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(ref)
-        });
-
-        if(response.ok) {
-            message.style.color = "green";
-            message.textContent = "Reference added!";
-            form.reset();
-            loadReferences();
-        } else {
-            const err = await response.json();
-            message.style.color = "red";
-            message.textContent = err.message || "Failed to add reference";
-        }
-    } catch (err) {
-        message.style.color = "red";
-        message.textContent = "Network error: " + err.message;
-    }
-});
-
-// Delete reference
-async function deleteReference(e) {
-    const id = e.target.closest("tr").dataset.id;
-    if(!confirm("Are you sure you want to delete this reference?")) return;
-
-    try {
-        await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-        loadReferences();
-    } catch (err) {
-        alert("Failed to delete reference: " + err.message);
-    }
-}
-
-// Edit reference
-function editReference(e) {
-    const row = e.target.closest("tr");
-    const id = row.dataset.id;
-
-    // Make editable
-    row.querySelector(".title").innerHTML = `<input type="text" value="${row.querySelector(".title").textContent}">`;
-    row.querySelector(".description").innerHTML = `<textarea>${row.querySelector(".description").textContent}</textarea>`;
-    const currentCategory = row.querySelector(".category").textContent;
-    row.querySelector(".category").innerHTML = `
-        <select>
-            <option value="Patent" ${currentCategory==="Patent"?'selected':''}>Patent</option>
-            <option value="Trademark" ${currentCategory==="Trademark"?'selected':''}>Trademark</option>
-            <option value="Copyright" ${currentCategory==="Copyright"?'selected':''}>Copyright</option>
-            <option value="General" ${currentCategory==="General"?'selected':''}>General</option>
-        </select>
-    `;
-
-    // Change buttons
-    const editBtn = row.querySelector(".edit-btn");
-    editBtn.textContent = "Save";
-    editBtn.classList.remove("edit-btn");
-    editBtn.classList.add("save-btn");
-
-    // Add save event
-    row.querySelector(".save-btn").addEventListener("click", async () => {
-        const updatedRef = {
-            title: row.querySelector("input").value,
-            description: row.querySelector("textarea").value,
-            category: row.querySelector("select").value
-        };
-
-        try {
-            await fetch(`${API_URL}/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updatedRef)
-            });
-            loadReferences();
-        } catch (err) {
-            alert("Failed to update reference: " + err.message);
-        }
+    document.querySelectorAll(".edit-btn").forEach(btn=>{
+        btn.onclick = editRef;
     });
 }
 
-// Initial load
+// Add reference (FIXED FIELD NAME)
+form.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+
+    const ref = {
+        title: title.value,
+        description: description.value,
+        officialUrl: link.value,   // ✅ FIXED HERE
+        category: category.value,
+        level: level.value
+    };
+
+    const res = await fetch(API_URL,{
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify(ref)
+    });
+
+    const data = await res.json();
+
+    if(res.ok){
+        message.style.color="green";
+        message.textContent="Reference added successfully!";
+        form.reset();
+        loadReferences();
+    } else {
+        message.style.color="red";
+        message.textContent=data.message || "Error adding reference";
+    }
+});
+
+// Delete
+async function deleteRef(e){
+    const id = e.target.closest("tr").dataset.id;
+
+    await fetch(`${API_URL}/${id}`,{
+        method:"DELETE"
+    });
+
+    loadReferences();
+}
+
+// Edit
+function editRef(e){
+    const row = e.target.closest("tr");
+    const id = row.dataset.id;
+
+    const t = row.querySelector(".title").textContent;
+    const d = row.querySelector(".description").textContent;
+    const c = row.querySelector(".category").textContent;
+    const l = row.querySelector(".level").textContent;
+
+    row.querySelector(".title").innerHTML = `<input value="${t}">`;
+    row.querySelector(".description").innerHTML = `<textarea>${d}</textarea>`;
+
+    row.querySelector(".category").innerHTML = `
+        <select>
+            <option ${c=="Patent"?"selected":""}>Patent</option>
+            <option ${c=="Trademark"?"selected":""}>Trademark</option>
+            <option ${c=="Copyright"?"selected":""}>Copyright</option>
+            <option ${c=="GI"?"selected":""}>GI</option>
+            <option ${c=="Design"?"selected":""}>Design</option>
+            <option ${c=="General"?"selected":""}>General</option>
+        </select>
+    `;
+
+    row.querySelector(".level").innerHTML = `
+        <select>
+            <option ${l=="Beginner"?"selected":""}>Beginner</option>
+            <option ${l=="Intermediate"?"selected":""}>Intermediate</option>
+            <option ${l=="Advanced"?"selected":""}>Advanced</option>
+        </select>
+    `;
+
+    e.target.textContent = "Save";
+    e.target.classList.add("save-btn");
+
+    e.target.onclick = async function(){
+
+        const updated = {
+            title: row.querySelector("input").value,
+            description: row.querySelector("textarea").value,
+            category: row.querySelector(".category select").value,
+            level: row.querySelector(".level select").value,
+            officialUrl: row.querySelector("a").href
+        };
+
+        await fetch(`${API_URL}/${id}`,{
+            method:"PUT",
+            headers:{ "Content-Type":"application/json" },
+            body: JSON.stringify(updated)
+        });
+
+        loadReferences();
+    }
+}
+
 loadReferences();
+
 </script>
 
 </body>

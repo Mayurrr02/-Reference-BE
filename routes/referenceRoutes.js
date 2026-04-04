@@ -11,7 +11,7 @@ router.post("/", async (req, res) => {
       title: req.body.title,
       content: req.body.content,
       category: req.body.category,
-      level: req.body.level,
+      level: req.body.level || "Beginner", // ✅ FIXED
       tags: req.body.tags || [],
       type: req.body.type || "concept"
     });
@@ -40,12 +40,9 @@ router.get("/", async (req, res) => {
       };
     }
 
-    // LEVEL (case-insensitive)
+    // ✅ FIXED: LEVEL (exact match instead of regex)
     if (level) {
-      filter.level = {
-        $regex: level,
-        $options: "i"
-      };
+      filter.level = level;
     }
 
     // SEARCH (title + content)
